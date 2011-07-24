@@ -84,7 +84,31 @@ margin : 0 auto;
 
 }
 
+#content p.app-controls a {
+	
+	padding:2px 5px;
+	box-shadow: 0px 1px 5px #999;
+	background:#eee;
+	margin:2px;
+	font-size:12px;
+	color:#777;
+	text-decoration:none;
+	border-radius:5px;
 
+}
+
+#content p.app-controls {
+	
+	padding:0 0 20px 0;
+
+}
+
+#content p.app-controls a:hover {
+	
+		box-shadow: inset 0px 1px 5px #999;
+	background:#777;
+	color:#eee;
+}
 
 div.module {
 	
@@ -261,13 +285,13 @@ div.enabled.dirty {
 
 div.enabled {
 	
-	background: white;
+	background: #eee url('button-on.png') no-repeat 575px 10px;
 
 }
 
 div.disabled {
 	
-	background: #bbb;
+	background: #bbb url('button-off.png') no-repeat 575px 10px;
 	color: #eee;
 
 }

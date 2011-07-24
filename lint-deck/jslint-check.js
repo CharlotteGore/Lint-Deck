@@ -17,7 +17,7 @@ exports.checkFile = function(file, callback){
 
 		};
 
-		var result = JSLINT(data, {evil: true, forin: true, maxerr: 100});
+		var result = JSLINT(data, {maxerr: 100});
 
 		var found = 0, w;
 

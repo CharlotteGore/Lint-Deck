@@ -140,7 +140,6 @@ Module.prototype = {
 
 		this.timeoutId = -1;
 		this.hasFiles = false;
-		this.lastUpdate = module.lastUpdate;
 
 		// copy the data to this
 		$.extend(this, module);
@@ -185,53 +184,36 @@ Module.prototype = {
 
 		this.filesHTML.hide();
 
-		this.disableButton = $('<a class="ajax" rel="' + this.links["disable module"].rel+ '" href="#" title="Disable module">Disable monitoring</a>"');
-		this.enableButton = $('<a class="ajax" rel="' + this.links["enable module"].rel+ '" href="#" title="Disable module">Enable monitoring</a>"');
-		this.viewFilesButton = $('<a class="ajax" rel="' + this.links["view files"].rel + '" href="#" title="View files">View files</a>"');
-		this.hideFilesButton = $('<a class="ajax" href="#" title="Hide files">Hide files</a>"');
-
-		controlsHTML.append(this.disableButton);
-		controlsHTML.append(this.enableButton);
-		controlsHTML.append(this.viewFilesButton);
-		controlsHTML.append(this.hideFilesButton);
 
 		jq.append(this.moduleHTML);
 
-		this.disableButton.bind('click', function(e){
+		this.moduleHTML.bind('click', function(e){
 			
-			that.disable();
+			if(that.filesHTML.is(':hidden')){
+
+				that.enable();
+
+			}else{
+				
+				that.disable();
+
+			}
+
+			that.filesHTML.toggle();
+			
 			e.preventDefault();
 
 		});
 
-		this.enableButton.bind('click', function(e){
-			
-			e.preventDefault();
-			that.enable();
 
-		});
 
-		this.viewFilesButton.bind('click', function(e){
-			
-			e.preventDefault();
-			that.viewFiles();
-
-		});
-
-		this.hideFilesButton.bind('click', function(e){
-			
-			e.preventDefault();
-			that.hideFiles();
-
-		});
 
 		if(module.enabled==="enabled"){
 			
 			this.enable();
 
 		}else{
-			
-			this.disable();
+
 
 		}
 
@@ -245,26 +227,29 @@ Module.prototype = {
 	enable : function(e){
 
 		var that = this;
-		this.enabled = true;
-		
-		// begin the long polling to check for changes, and send an enable request.
-		that.requestUpdate();
 
-		$.ajax({
-				url : this.links["enable module"].uri,
-				type : "PUT",
-				success : function(data, status, res){
+		if(this.enabled==="disabled"){
 
-					that.moduleHTML.addClass('enabled').removeClass('disabled');
-					that.disableButton.show();
-					that.enableButton.hide();
-					that.viewFiles();
+			this.enabled = "enabled";
+			
+			// begin the long polling to check for changes, and send an enable request.
+			that.requestUpdate();
+
+			$.ajax({
+					url : this.links["enable module"].uri,
+					type : "PUT",
+					success : function(data, status, res){
+
+						that.moduleHTML.addClass('enabled').removeClass('disabled');
+
+						that.filesHTML.show();
 
 
+					}
 
-				}
+				});
 
-			});
+		}
 
 
 	},
@@ -272,7 +257,7 @@ Module.prototype = {
 	disable : function(){
 		
 		var that = this;
-		this.enabled = false;
+		this.enabled = "disabled";
 		// disable the long polling
 
 		// send the disable request
@@ -282,9 +267,8 @@ Module.prototype = {
 			success : function(data, status, res){
 
 				that.moduleHTML.addClass('disabled').removeClass('enabled');
-				that.disableButton.hide();
-				that.enableButton.show();
-				that.hideFiles();
+
+				that.filesHTML.hide();
 
 			}
 
@@ -325,7 +309,7 @@ Module.prototype = {
 			}else{
 
 				this.moduleHTML.removeClass('clean').addClass('dirty');
-				this.viewFiles();
+				this.filesHTML.show();
 
 			}
 
@@ -348,32 +332,25 @@ Module.prototype = {
 
 		}
 
-	},
-
-	viewFiles : function(){
-		
-		this.filesHTML.show();
-
-		this.hideFilesButton.show();
-		this.viewFilesButton.hide();
-
-	},
-
-	hideFiles : function(){
-		
-		this.filesHTML.hide();
-
-
-		this.hideFilesButton.hide();
-		this.viewFilesButton.show();
-
 	}
 
 };
 
 $(document).ready(function(){
 
+	$('#content').delegate('a[rel="app/hide-inactive-modules"]', 'click', function(e){
+		
+		e.preventDefault();
 
+		$('div.module.disabled').hide();
+
+	}).delegate('a[rel="app/show-modules"]', 'click', function(e){
+		
+		e.preventDefault();
+
+		$('div.module.disabled').show();
+
+	});
 
 	$.ajax({
 		

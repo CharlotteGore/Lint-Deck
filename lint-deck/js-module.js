@@ -302,7 +302,7 @@ var createModule = function(name, path, broker){
 
 exports.createModule = createModule;
 
-var traverseFileSystem = function(currentPath, broker){
+var traverseFileSystem = function(currentPath, broker, depth){
 	
 	var moduleName = currentPath.replace(global.userPath, ''), i;
 
@@ -339,8 +339,10 @@ var traverseFileSystem = function(currentPath, broker){
 			}
 			
 		}else if(stats.isDirectory()){
-			
-			traverseFileSystem(currentFile, broker);
+
+			if(depth < 2){
+				traverseFileSystem(currentFile, broker, depth + 1);
+			}
 
 		}
 
@@ -350,7 +352,7 @@ var traverseFileSystem = function(currentPath, broker){
 
 exports.findAndCreateModules = function(path, broker){
 
-	traverseFileSystem(path, broker);
+	traverseFileSystem(path, broker, 0);
 
 	broker.emit('modules initialised', {});
 

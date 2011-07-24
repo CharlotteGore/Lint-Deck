@@ -9,6 +9,9 @@ var getRoutes = {
 	"/jquery.js" : s.staticHandler("./Lib/jquery-1.4.4.js"),
 	"/lint-deck.css" : s.staticHandler("./lint-deck/lint-deck.css"),
 	"/client.js" : s.staticHandler("./lint-deck/client.js"),
+	"/button-off.png" : s.staticHandler("./lint-deck/button-off.png"),
+	"/button-on.png" : s.staticHandler("./lint-deck/button-on.png"),
+
 
 	"/module/**" : function(req, res, module){
 		

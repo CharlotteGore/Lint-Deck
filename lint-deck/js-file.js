@@ -25,6 +25,7 @@ JSFile.prototype = {
 	test : function( callback ){
 
 		var clean, that = this;
+		this.scanned = true;
 		
 		JSLINT.checkFile(this.fileName, function(errors){
 			
