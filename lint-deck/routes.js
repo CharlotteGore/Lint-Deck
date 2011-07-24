@@ -42,7 +42,7 @@ var getRoutes = {
 
 		if(global.modules[module]){
 
-			if(qs.parse(url.parse(req.url).query).since < global.modules[module].updates){
+			if(qs.parse(url.parse(req.url).query).since < global.modules[module].lastUpdate){
 				
 				s.jsonize(global.modules[module].getFullStatus(), res);
 

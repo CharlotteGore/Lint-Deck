@@ -13,7 +13,7 @@ var JSModule = function(name, path, broker){
 	this.files = {};
 	this.fileCount = 0;
 	this.broker = broker;
-	this.updates = 0;
+	this.lastUpdate = (new Date()).getTime();
 
 	this.broker.emit('jsModule added', this);
 
@@ -144,7 +144,8 @@ JSModule.prototype = {
 			}
 
 			if(status==="changed"){
-				
+
+				this.lastUpdate = (new Date()).getTime();				
 				this.broker.emit("file status changed", {module: this, file : this.files[file]});
 
 			}
@@ -175,6 +176,7 @@ JSModule.prototype = {
 			enabled : this.enabled ? "enabled" : "disabled",
 			path : this.path,
 			fileCount : this.fileCount,
+			lastUpdate : this.lastUpdate,
 			links : [
 				{
 					rel : "module/enable",
@@ -210,7 +212,7 @@ JSModule.prototype = {
 			enabled : this.enabled ? "enabled" : "disabled",
 			path : this.path,
 			fileCount : this.fileCount,
-			update : this.updates,
+			lastUpdate : this.lastUpdate,
 			links : [
 				{
 					rel : "module/enable",
@@ -302,9 +304,9 @@ exports.createModule = createModule;
 
 var traverseFileSystem = function(currentPath, broker){
 	
-	var moduleName = currentPath, i;
+	var moduleName = currentPath.replace(global.userPath, ''), i;
 
-	if(moduleName==="."){
+	if(moduleName===""){
 		
 		moduleName="root";
 

@@ -2,7 +2,6 @@ HOST = null;
 PORT = 8001;
 
 var fs = require('fs'),
-	path = process.argv[2] || '.',
 	events = require('events'),
 	jsModule = require('./lint-deck/js-module'),
 	url = require('url'),
@@ -11,6 +10,9 @@ var fs = require('fs'),
 	getRoutes = require('./lint-deck/routes').getRoutes(),
 	putRoutes = require('./lint-deck/routes').putRoutes(),
 	router = require('./lint-deck/choreographer').router();
+
+global.userPath = process.argv[2] || '.';
+
 
 var startTime = (new Date()).getTime();
 
@@ -53,7 +55,7 @@ var registerRoutes = function(){
 
 var lintDeck = function(){
 	
-	global.modules = jsModule.findAndCreateModules(path, broker);
+	global.modules = jsModule.findAndCreateModules(global.userPath, broker);
 
 	var i;
 
@@ -75,8 +77,6 @@ var lintDeck = function(){
 		var i;
 		var module = message.module;
 		var file = message.file;
-
-		module.updates++;
 
 		for(i = 0;i < global.requests.length;i++){
 			

@@ -58,13 +58,27 @@ File.prototype = {
 
 			data.errors.forEach(function(error){
 				
-				//		print( "\n" + w.evidence + "\n" );
-		//				print( "    Problem at line " + w.line + " character " + w.character + ": " + w.reason );
+			var evidence = [];
+				if(error.evidence){
+
+					evidence[0] = error.evidence.substr(0, error.character);
+					evidence[1] = error.evidence.substr(error.character, 1) ;
+	 				evidence[2] = error.evidence.substr(error.character + 1) ;
+
+ 				 	evidence = evidence[0] + '<span class="error-point">' + evidence[1] + '</span>' + evidence[2];
+ 				}else{
+ 					
+ 					evidence = "";
+
+ 				}
+
+
+
 
 				var html = '<div class="error">';
 					html+= '<p class="evidence">';
 					html+= '<span class="line-number">' + error.line + '</span>';
-					html+= '<code class="brush: js">' + error.evidence + '</code>';
+					html+= '<code>' + evidence + '</code>';
 					html+= '</p>';
 					html+= '<p class="reason">Problem at line ' + error.line + ' character ' + error.character + ': ' + error.reason +'</p>';
 						   
@@ -126,12 +140,19 @@ Module.prototype = {
 
 		this.timeoutId = -1;
 		this.hasFiles = false;
+		this.lastUpdate = module.lastUpdate;
 
 		// copy the data to this
 		$.extend(this, module);
 
 		// parse the links..
 		this.links = Module.parseLinks(module.links);
+
+		if(module.name==="root"){
+			
+			module.name="/";
+
+		}
 
 
 		this.moduleHTML = $('<div class="module ' + module.enabled + ' ' + module.status + '"><h3>' + module.name + '</h3></div>');
@@ -204,9 +225,15 @@ Module.prototype = {
 
 		});
 
-		that.disableButton.hide();
-		that.hideFilesButton.hide();
+		if(module.enabled==="enabled"){
+			
+			this.enable();
 
+		}else{
+			
+			this.disable();
+
+		}
 
 	},
 
@@ -223,14 +250,12 @@ Module.prototype = {
 		// begin the long polling to check for changes, and send an enable request.
 		that.requestUpdate();
 
-
 		$.ajax({
 				url : this.links["enable module"].uri,
 				type : "PUT",
 				success : function(data, status, res){
 
 					that.moduleHTML.addClass('enabled').removeClass('disabled');
-					that.requestUpdate();
 					that.disableButton.show();
 					that.enableButton.hide();
 					that.viewFiles();
@@ -288,11 +313,9 @@ Module.prototype = {
 		
 		var that = this;
 
-		console.log(data);
-
 		if(data.status){
 
-			this.lastUpdate = data.update;
+			this.lastUpdate = data.lastUpdate;
 
 			if(data.status==="clean"){
 				

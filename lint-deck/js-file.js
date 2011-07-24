@@ -4,6 +4,7 @@ var fs = require('fs');
 var JSFile = function(file){
 	
 	this.fileName = file;
+	this.name = file.replace(global.userPath, "");
 	this.clean = 1; // clean by default
 	this.errors = [];
 	this.scanned = false;
@@ -83,7 +84,7 @@ JSFile.prototype = {
 					that.stats = stats;
 					callback(0);
 
-				}else if( (new Date(that.stats.mtime)).getTime() !== (new Date(stats.mtime)).getTime() ){
+				}else if( that.stats.mtime.getTime() !== stats.mtime.getTime() ){
 
 					that.stats = stats;
 					callback(0);
@@ -104,7 +105,7 @@ JSFile.prototype = {
 		
 		var result = {
 			
-			name : this.fileName,
+			name : this.name,
 			status : this.clean ? "clean" : "dirty",
 			size : this.stats.size,
 			modified : (new Date(this.stats.mtime)).getTime()

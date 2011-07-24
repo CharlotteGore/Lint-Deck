@@ -11,6 +11,12 @@ exports.checkFile = function(file, callback){
 			throw err;
 		}
 
+		if(data.charCodeAt(0)===65279){
+
+			data = data.substr(1);			
+
+		};
+
 		var result = JSLINT(data, {evil: true, forin: true, maxerr: 100});
 
 		var found = 0, w;

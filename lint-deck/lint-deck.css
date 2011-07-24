@@ -161,6 +161,12 @@ div.files-container div.errors-container p.evidence {
 
 }
 
+div.files-container div.errors-container p.evidence code span.error-point {
+	
+	border-bottom:1px dotted #900;
+
+}
+
 div.files-container div.errors-container p.reason {
 
 	padding:5px 0px;
