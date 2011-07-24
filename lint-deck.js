@@ -55,6 +55,18 @@ var lintDeck = function(){
 	
 	global.modules = jsModule.findAndCreateModules('.', broker);
 
+	var i;
+
+	for(i in global.modules){
+		
+		if(global.modules[i].fileCount===0){
+			
+			delete global.modules[i];
+
+		}
+
+	}
+
 	//global.modules['root'].enable();
 
 	// here's where we set up something to 
