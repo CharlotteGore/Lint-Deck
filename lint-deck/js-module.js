@@ -115,30 +115,39 @@ JSModule.prototype = {
 		
 		// don't actually need the status, do we?
 
-		var property, moduleStatus = 1; // presume clean
+		if(status===-1){
+			
+			console.log('detected file deletion');
+			this.files[file].deleted = true;
 
-		for(property in this.files){
-			
-			if(this.files[property].clean===0){
-			
-				moduleStatus = 0;
+		}else{
+
+			var property, moduleStatus = 1; // presume clean
+
+			for(property in this.files){
+				
+				if(this.files[property].clean===0){
+				
+					moduleStatus = 0;
+
+				}
 
 			}
 
-		}
+			if(moduleStatus!==this.clean){
 
-		if(moduleStatus!==this.clean){
+				this.clean = moduleStatus;
 
-			this.clean = moduleStatus;
-
-			this.broker.emit("module status changed", this);
+				this.broker.emit("module status changed", this);
 
 
-		}
+			}
 
-		if(status==="changed"){
-			
-			this.broker.emit("file status changed", {module: this, file : this.files[file]});
+			if(status==="changed"){
+				
+				this.broker.emit("file status changed", {module: this, file : this.files[file]});
+
+			}
 
 		}
 
@@ -230,7 +239,7 @@ JSModule.prototype = {
 		var i;
 
 		for(i in this.files){
-			
+
 			result.files.push(this.files[i].query());
 
 		}
@@ -272,8 +281,10 @@ JSModule.prototype = {
 			};
 
 		for(property in this.files){
-			
-			this.files[property].test( updateFile(property) );
+
+			if(!this.files[property].deleted){
+				this.files[property].test( updateFile(property) );
+			}
 
 		}
 

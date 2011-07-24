@@ -44,11 +44,10 @@ JSFile.prototype = {
 				callback("changed");
 
 				if(clean!==0){
-					console.log(that.fileName + " is now clean");
+
 					that.errors = [];
 				}else{
 					
-					console.log(that.fileName + " is now dirty");
 
 				}
 
@@ -74,22 +73,26 @@ JSFile.prototype = {
 		fs.stat(this.fileName, function(err, stats){
 			
 			if(err){
-				throw err;
-			}
 
-			if(that.stats.size!==stats.size){
-				
-				that.stats = stats;
-				callback(0);
-
-			}else if( (new Date(that.stats.mtime)).getTime() !== (new Date(stats.mtime)).getTime() ){
-
-				that.stats = stats;
-				callback(0);
-
+				callback(-1);
+			
 			}else{
 
-				callback(1);
+				if(that.stats.size!==stats.size){
+					
+					that.stats = stats;
+					callback(0);
+
+				}else if( (new Date(that.stats.mtime)).getTime() !== (new Date(stats.mtime)).getTime() ){
+
+					that.stats = stats;
+					callback(0);
+
+				}else{
+
+					callback(1);
+
+				}
 
 			}
 
@@ -116,6 +119,11 @@ JSFile.prototype = {
 		if(this.errors.length > 0){
 			
 			result.errors = this.errors;
+
+		}
+
+		if(this.deleted){
+			result.status = "deleted";
 
 		}
 

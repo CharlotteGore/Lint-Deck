@@ -71,6 +71,7 @@ font-family: "Segoe UI", Candara, "Bitstream Vera Sans", "DejaVu Sans", "Bitstre
 #header h1 {
 	
 	font-size:20px;
+	text-shadow: 0px 0px 10px #ddd;
 
 }
 
@@ -134,7 +135,7 @@ div.files-container div.errors-container {
 div.files-container div.errors-container div.error {
 	
 	padding: 10px;
-	box-shadow: inset 0px 2px 10px #777;
+	/* box-shadow: inset 0px 2px 10px #777; */
 	margin: 5px 0px;
 	position:relative;
 	border-radius: 5px 5px 5px 5px;
@@ -142,7 +143,7 @@ div.files-container div.errors-container div.error {
 
 }
 
-div.files-container code, div.files-container span.line-number  {
+div.files-container pre, div.files-container span.line-number  {
 	
 	font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
 	display: inline;
@@ -156,6 +157,7 @@ div.files-container div.errors-container p.evidence {
 	width: 559px;
 	line-height:2em;
 	overflow:hidden;
+	display:inline;
 
 }
 
@@ -175,6 +177,7 @@ div.files-container h4 {
 	font-size: 14px;
 	text-shadow :  0px 2px 10px #999;
 	font-weight: bold;
+	margin-bottom: 7px;
 
 
 }
@@ -188,14 +191,16 @@ div.files-container p {
 
 div.files-container div.dirty {
 	
-	background:#e99;
+	background:#e44;
+	box-shadow: 0px 0px 10px #e44;
 	color: #333;
 
 }
 
 div.files-container div.clean {
 	
-	background:#9e9;
+	background:#7e7;
+	box-shadow: 0px 0px 10px #7e7;
 	color: #333;
 
 }
@@ -260,5 +265,3 @@ div.disabled {
 	color: #eee;
 
 }
-
-

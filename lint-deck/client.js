@@ -64,7 +64,7 @@ File.prototype = {
 				var html = '<div class="error">';
 					html+= '<p class="evidence">';
 					html+= '<span class="line-number">' + error.line + '</span>';
-					html+= '<code>' + error.evidence + '</code>';
+					html+= '<code class="brush: js">' + error.evidence + '</code>';
 					html+= '</p>';
 					html+= '<p class="reason">Problem at line ' + error.line + ' character ' + error.character + ': ' + error.reason +'</p>';
 						   
@@ -164,45 +164,48 @@ Module.prototype = {
 
 		this.filesHTML.hide();
 
-		var disable = $('<a class="ajax" rel="' + this.links["disable module"].rel+ '" href="#" title="Disable module">Disable monitoring</a>"');
-		var enable = $('<a class="ajax" rel="' + this.links["enable module"].rel+ '" href="#" title="Disable module">Enable monitoring</a>"');
-		var viewFiles = $('<a class="ajax" rel="' + this.links["view files"].rel + '" href="#" title="View files">View files</a>"');
-		var hideFiles = $('<a class="ajax" href="#" title="Hide files">Hide files</a>"');
+		this.disableButton = $('<a class="ajax" rel="' + this.links["disable module"].rel+ '" href="#" title="Disable module">Disable monitoring</a>"');
+		this.enableButton = $('<a class="ajax" rel="' + this.links["enable module"].rel+ '" href="#" title="Disable module">Enable monitoring</a>"');
+		this.viewFilesButton = $('<a class="ajax" rel="' + this.links["view files"].rel + '" href="#" title="View files">View files</a>"');
+		this.hideFilesButton = $('<a class="ajax" href="#" title="Hide files">Hide files</a>"');
 
-		controlsHTML.append(disable);
-		controlsHTML.append(enable);
-		controlsHTML.append(viewFiles);
-		controlsHTML.append(hideFiles);
+		controlsHTML.append(this.disableButton);
+		controlsHTML.append(this.enableButton);
+		controlsHTML.append(this.viewFilesButton);
+		controlsHTML.append(this.hideFilesButton);
 
 		jq.append(this.moduleHTML);
 
-		disable.bind('click', function(e){
+		this.disableButton.bind('click', function(e){
 			
 			that.disable();
 			e.preventDefault();
 
 		});
 
-		enable.bind('click', function(e){
+		this.enableButton.bind('click', function(e){
 			
 			e.preventDefault();
 			that.enable();
 
 		});
 
-		viewFiles.bind('click', function(e){
+		this.viewFilesButton.bind('click', function(e){
 			
 			e.preventDefault();
 			that.viewFiles();
 
 		});
 
-		hideFiles.bind('click', function(e){
+		this.hideFilesButton.bind('click', function(e){
 			
 			e.preventDefault();
 			that.hideFiles();
 
 		});
+
+		that.disableButton.hide();
+		that.hideFilesButton.hide();
 
 
 	},
@@ -228,6 +231,11 @@ Module.prototype = {
 
 					that.moduleHTML.addClass('enabled').removeClass('disabled');
 					that.requestUpdate();
+					that.disableButton.show();
+					that.enableButton.hide();
+					that.viewFiles();
+
+
 
 				}
 
@@ -249,6 +257,9 @@ Module.prototype = {
 			success : function(data, status, res){
 
 				that.moduleHTML.addClass('disabled').removeClass('enabled');
+				that.disableButton.hide();
+				that.enableButton.show();
+				that.hideFiles();
 
 			}
 
@@ -286,12 +297,12 @@ Module.prototype = {
 			if(data.status==="clean"){
 				
 				this.moduleHTML.removeClass('dirty').addClass('clean');
-				this.filesHTML.hide();
+				//this.filesHTML.hide();
 
 			}else{
 
 				this.moduleHTML.removeClass('clean').addClass('dirty');
-				this.filesHTML.show();
+				this.viewFiles();
 
 			}
 
@@ -320,11 +331,18 @@ Module.prototype = {
 		
 		this.filesHTML.show();
 
+		this.hideFilesButton.show();
+		this.viewFilesButton.hide();
+
 	},
 
 	hideFiles : function(){
 		
 		this.filesHTML.hide();
+
+
+		this.hideFilesButton.hide();
+		this.viewFilesButton.show();
 
 	}
 

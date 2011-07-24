@@ -40,8 +40,6 @@ var getRoutes = {
 
 		}
 
-
-
 		if(global.modules[module]){
 
 			if(qs.parse(url.parse(req.url).query).since < global.modules[module].updates){
@@ -54,8 +52,6 @@ var getRoutes = {
 					module : module,
 					timestamp : (new Date()).getTime(),
 					callback : function(data){
-						
-						console.log('boo');
 
 						s.jsonize(data, res);				
 
@@ -97,8 +93,6 @@ var getRoutes = {
 			module = "root";
 
 		}
-
-		console.log("files.json request: " + module);
 
 		if(global.modules[module]){
 			

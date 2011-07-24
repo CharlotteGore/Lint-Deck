@@ -2,7 +2,7 @@ HOST = null;
 PORT = 8001;
 
 var fs = require('fs'),
-	path = process.argv[2] || process.cwd(),
+	path = process.argv[2] || '.',
 	events = require('events'),
 	jsModule = require('./lint-deck/js-module'),
 	url = require('url'),
@@ -24,7 +24,7 @@ setInterval(function(){
 	var now = (new Date()).getTime();
 
 	while(global.requests.length > 0 && now - global.requests[0].timestamp > 30 * 1000){
-		console.log("stale request deleted");
+
 		global.requests.shift().callback([]);
 
 	}
@@ -53,7 +53,7 @@ var registerRoutes = function(){
 
 var lintDeck = function(){
 	
-	global.modules = jsModule.findAndCreateModules('.', broker);
+	global.modules = jsModule.findAndCreateModules(path, broker);
 
 	var i;
 
