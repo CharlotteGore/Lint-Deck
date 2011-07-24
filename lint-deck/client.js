@@ -2,6 +2,7 @@ var modules = {};
 
 var File = function(){ return this; };
 
+
 File.prototype = {
 	
 	registerFile : function(file, jq){

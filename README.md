@@ -4,4 +4,4 @@ Assuming you already have node installed, clone this repo somewhere then do a 'n
 
 Once it's running point your browser at 127.0.0.1:8001, and that's it. By default all modules are disabled, you simply click "enable monitoring" to begin.
 
-It's a bit rough and ready, only tested on Chrome, but it's working and useful.
+This is still very rough and ready atm, made worse by developing on the new (but unstable) node.exe. Your milage, etc.
