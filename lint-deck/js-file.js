@@ -8,7 +8,7 @@ var JSFile = function(file){
 	this.clean = 1; // clean by default
 	this.errors = [];
 	this.scanned = false;
-	this.stats = {size : 0, mtime : '1st January 1999'};
+	this.stats = {size : 0, mtime : (new Date('1st January 1999'))};
 
 	return this;
 
@@ -25,7 +25,6 @@ JSFile.prototype = {
 	test : function( callback ){
 
 		var clean, that = this;
-		this.scanned = true;
 		
 		JSLINT.checkFile(this.fileName, function(errors){
 			
