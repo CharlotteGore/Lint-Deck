@@ -343,12 +343,14 @@ $(document).ready(function(){
 		e.preventDefault();
 
 		$('div.module.disabled').hide();
+		$('div.module.enabled').show();
 
 	}).delegate('a[rel="app/show-modules"]', 'click', function(e){
 		
 		e.preventDefault();
 
 		$('div.module.disabled').show();
+		$('div.module.enabled').show();
 
 	});
 
